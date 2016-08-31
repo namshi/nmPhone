@@ -9,7 +9,7 @@ angular
           ngModel.$parsers.unshift(function(value) {
             var isValid = nmPhoneUtils.isValidPhoneNumber(value);
             ngModel.$setValidity('nmPhoneNumberSingleInput', isValid);
-            return isValid ? isValid : undefined;
+            return isValid ? value : undefined;
           });
 
           ngModel.$formatters.unshift(function(value) {

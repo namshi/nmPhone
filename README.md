@@ -2,7 +2,7 @@
 
 Angular directives and a separate module to valid international phone numbers.
 
-## Install
+## Install (bower)
 
 If you want to use the directives as a bower component
 
@@ -22,6 +22,14 @@ If you want to use the directives remember to add the module name into the app d
 ```
 angular.module('my_App', [..., 'namshi.nmPhoneNumber', ...]);
 ```
+
+## Install (npm)
+
+```
+npm install --save git://github.com/namshi/nmPhone.git#1.0.2
+```
+
+**Note**: the exported module is the `utils.js` module.
 
 ## Build dist files
 

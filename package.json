@@ -1,13 +1,13 @@
 {
   "name": "nmPhone",
-  "version": "1.0.2",
-  "description": "",
+  "version": "1.0.3",
+  "description": "Angular directives and a separate module to validate international phone numbers.",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
     "build-dist": "./node_modules/.bin/webpack"
   },
-  "author": "",
+  "author": "Filippo De Santis <filippo.desantis@namshi.com>",
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.5.1"

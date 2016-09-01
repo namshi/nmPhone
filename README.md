@@ -1,6 +1,6 @@
 # nmPhone
 
-Angular directives and a separate module to valid international phone numbers.
+Angular directives and a separate module to validate international phone numbers.
 
 ## Install (bower)
 

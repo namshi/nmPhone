@@ -1,25 +1,20 @@
 'use strict';
 
+/**
+ * This directive defines utilities to validate an international phone number based on 3 inputs:
+ *
+ * - country
+ * - carrier
+ * - number
+ *
+ * It will expose helper methods to run the validation on single fields and the three combined.
+ *
+ * You can specify which country are allowed and which validation to perform on each. (see `test/utilsTest.js`)
+ *
+ */
 angular
-  .module('namshi.nmPhoneNumber', [])
-  .directive('nmPhoneNumberSingleInput', function () {
-     return {
-        require: 'ngModel',
-        link: function($scope, elem, attr, ngModel) {
-          ngModel.$parsers.unshift(function(value) {
-            var isValid = nmPhoneUtils.isValidPhoneNumber(value);
-            ngModel.$setValidity('nmPhoneNumberSingleInput', isValid);
-            return isValid ? value : undefined;
-          });
-
-          ngModel.$formatters.unshift(function(value) {
-            ngModel.$setValidity('nmPhoneNumberSingleInput', nmPhoneUtils.isValidPhoneNumber(value));
-            return value;
-          });
-        }
-     }
-  })
-  .directive('nmPhoneNumber', function () {
+  .module('namshi.nmPhoneNumber')
+  .directive('nmPhoneNumberMultiInput', function () {
     return {
       scope: {
         phoneNumber: '=phoneNumber',
@@ -49,7 +44,7 @@ angular
         $scope.phoneData = nmPhoneUtils.parsePhone($scope.phoneNumber, $scope.phoneSettings);
         $scope.getProperty = getProperty;
 
-        $scope.changeCarrierCode = function() {
+        $scope.onContrySelected = function(options) {
           resetValidation();
           $scope.validateCountry();
 
@@ -65,7 +60,7 @@ angular
           cellTokens.carrierCode = phoneCodes.carrierCodes[0] ? phoneCodes.carrierCodes[0].toString() : null;
 
           $scope.validateCarrierCode();
-          $scope.validateNumber({trimNumber: false});
+          !options.validateNumber ? null : $scope.validateNumber({trimNumber: false});
         };
 
         $scope.savePhone = function (phoneData) {

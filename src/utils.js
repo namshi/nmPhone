@@ -27,13 +27,41 @@ var nmPhoneUtils = {
   contains: contains,
 
   /**
+   * load country codes (971, 973, etc.) from config
+   *
+   * @param  {Object} phoneSettings
+   * @return {Array}
+   */
+  loadCountryCodes: function loadCountryCodes(phoneSettings) {
+    return _.map(phoneSettings, function (item) {
+      return item.phoneCodes.country;
+    });
+  },
+
+  /**
+   * Get country specific `phoneSetting` object
+   *
+   * @param  {Object} phoneSettings
+   * @param  {string|integer} countryCode
+   * @return {Object}
+   */
+  getCountryPhoneSettings: function getCountryPhoneSettings(phoneSettings, countryCode) {
+      var phoneSetting = _(phoneSettings).filter(function(item) {
+          return ''+item.phoneCodes.country === ''+countryCode;
+        }).value().shift();
+
+      return phoneSetting && phoneSetting.phoneCodes;
+  },
+
+
+  /**
    * Will verfy that a given value is in a phone number format.
    * The format is defined by a regex (see phoneRegex variable)
    *
    * @param  {Mixed} value
    * @return {Boolean}
    */
-  isValidPhoneNumber: function(value) {
+  isValidPhoneNumber: function isValidPhoneNumber(value) {
     return phoneRegex.test(value);
   },
 
@@ -54,9 +82,14 @@ var nmPhoneUtils = {
    * IF there are any errors it will return the same object
    * but all the values are going to be empty.
    */
-  parsePhone: function(phone, phoneSettings) {
+  parsePhone: function parsePhone(phone, phoneSettings, defaultCountry) {
+    var eo = _.clone(emptyPhoneObject);
+
     if (!phone || !phoneRegex.test(phone)) {
-      return emptyPhoneObject;
+      eo.fkCountry = defaultCountry || '';
+      eo.cellTokens.countryCode = phoneSettings[defaultCountry] ? phoneSettings[defaultCountry].phoneCodes.country : '';
+
+      return eo;
     }
 
     var matches = phone.match(phoneRegex);
@@ -66,18 +99,21 @@ var nmPhoneUtils = {
     });
 
     if (!phoneCountryConfig) {
-      return emptyPhoneObject;
+      eo.fkCountry = defaultCountry || '';
+      eo.cellTokens.countryCode = phoneSettings[defaultCountry] ? phoneSettings[defaultCountry].phoneCodes.country : '';
+
+      return eo;
     }
 
     var carrierCode = matches[3] || '';
     var number = matches[4];
 
     return {
-      fkCountry: phoneCountryConfig.iso2Code,
+      fkCountry: ''+phoneCountryConfig.iso2Code,
       cellTokens: {
-        countryCode: countryCode,
-        carrierCode: carrierCode,
-        number: number
+        countryCode: !!countryCode ? Number(countryCode) : "",
+        carrierCode: !!carrierCode ? Number(carrierCode) : "",
+        number: ''+number
       }
     };
   },
@@ -100,7 +136,7 @@ var nmPhoneUtils = {
    * @param  {Object} phoneSettings
    * @return {Object}
    */
-  validateCountry: function(countryId, phoneSettings) {
+  validateCountry: function validateCountry(countryId, phoneSettings) {
     if (!countryId) {
       return {valid: false, errors: ['empty']};
     }
@@ -130,7 +166,7 @@ var nmPhoneUtils = {
    * @param  {Object} phoneSettings
    * @return {Object}
    */
-  validateCarrierCode: function(carrierCode, countryId, phoneSettings) {
+  validateCarrierCode: function validateCarrierCode(carrierCode, countryId, phoneSettings) {
     if (!countryId) {
       return {
         valid: false
@@ -181,7 +217,7 @@ var nmPhoneUtils = {
    * @param  {Number} max     Max number length
    * @return {Object}
    */
-  validateNumber: function(number, min, max) {
+  validateNumber: function validateNumber(number, min, max) {
     if (!number) {
       return {
         valid: false,
@@ -221,8 +257,8 @@ var nmPhoneUtils = {
    * @param  {String} value
    * @return {String}
    */
-  extractNumbers: function (value) {
-    return value.replace(/[^\d]+/g, '');
+  extractNumbers: function extractNumbers(value) {
+    return value ? value.replace(/[^\d]+/g, '') : '';
   },
 
   /**
@@ -232,8 +268,38 @@ var nmPhoneUtils = {
    * @param  {Number} length
    * @return {String}
    */
-  shortenToLength: function (value, length) {
+  shortenToLength: function shortenToLength(value, length) {
     return value.substring(0, length);
+  },
+
+  /**
+   * Format the phoneData object into a string of the form:
+   *
+   * +<countrycode>-[<carriercode>-]<number>
+   *
+   * @param  {Object} phoneData
+   * @return {String}
+   */
+  getFormattedNumber: function getFormattedNumber(phoneData) {
+    if (!phoneData.cellTokens) {
+      return '';
+    }
+
+    return [
+        (!!phoneData.cellTokens.countryCode ? '+' + phoneData.cellTokens.countryCode : ''),
+        (''+phoneData.cellTokens.carrierCode),
+        (''+phoneData.cellTokens.number),
+      ].filter(function(v) { return !_.isEmpty(v); }).join('-');
+  },
+
+  isPhoneDataValid: function isPhoneDataValid(phoneData, phoneSettings, min, max) {
+    return (
+      !!phoneData.fkCountry &&
+      this.validateCountry(phoneData.fkCountry, phoneSettings).valid &&
+      this.validateCarrierCode(phoneData.cellTokens.carrierCode, phoneData.fkCountry, phoneSettings).valid &&
+      !!phoneData.cellTokens.number &&
+      this.validateNumber(phoneData.cellTokens.number, min, max).valid
+    );
   }
 }
 

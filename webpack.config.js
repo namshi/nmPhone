@@ -8,5 +8,9 @@ module.exports = {
         filename: "utils.js",
         libraryTarget: "var",
         library: "nmPhoneUtils"
-    }
+    },
+    target: "web",
+    externals: [
+        {"lodash": "_"}
+    ]
 };

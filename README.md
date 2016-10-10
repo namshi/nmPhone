@@ -20,8 +20,8 @@ To use the directives you need to include `src/nmPhoneNumber.js` as the first fi
 * `dist/utils.js` + `src/nmPhoneUtils.js`: it will attach the `nmPhoneUtils` module as a service in your angular app
 * `src/nmNumeric.js`: it's a directive that will make sure whatever you type will retain only numbers
 * `src/nmRangeLength.js`: it's a directive that will make sure whatever you type will be between a min and max length
-* `src/PhoneNumberSingleInput`: it's a directive that will make sure you are typing an international number (+<prefix>[-<carriere>]-<number>)
-* `src/PhoneNumberMultiInput`: it's a directive that will give you some utilities to handle the validation of an international number given as 3 different inputs: country, carrier, number.
+* `src/PhoneNumberSingleInput`: it's a directive that will make sure you are typing an international number (+<prefix>[-<carrier>]-<number>)
+* `src/PhoneNumberMultiInput`: it's a directive that will give you some utilities to handle the validation of an international number given as a form with 3 different inputs: country, carrier, number.
 
 
 Remember to add the module name into the app definition

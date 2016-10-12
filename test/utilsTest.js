@@ -384,6 +384,33 @@ describe('nmPhoneUtils', function() {
     });
   });
 
+  describe('getNumericValidator', function() {
+    it('should return a function that will filter out not numeric characters', function(done) {
+
+      var test = function(result) {
+        expect(result).to.equal('012345');
+        done();
+      }
+
+      utils.getNumericValidator(test)('a0123b45');
+    });
+
+    it('should not call the callback if the the input it is already numeric', function(done) {
+      var counter = 0;
+      var test = function(result) {
+        counter++;
+        expect(result).to.equal('012345');
+      }
+
+      var result =utils.getNumericValidator(test)('a0123b45');
+      result = utils.getNumericValidator(test)('012345');
+
+      expect(result).to.equal('012345');
+      expect(counter).to.equal(1);
+      done();
+    });
+  });
+
 });
 
 var phoneSettings = {

@@ -9,6 +9,16 @@ function contains(list, item) {
   return _(list).map(_.toString).includes(_.toString(item));
 };
 
+/**
+ * Extracts only the numeric characters from a string.
+ *
+ * @param  {String} value
+ * @return {String}
+ */
+function extractNumbers(value) {
+  return value ? value.replace(/[^0-9]+/g, '') : '';
+};
+
 var emptyPhoneObject = {
   fkCountry: '',
   cellTokens: {
@@ -257,9 +267,7 @@ var nmPhoneUtils = {
    * @param  {String} value
    * @return {String}
    */
-  extractNumbers: function extractNumbers(value) {
-    return value ? value.replace(/[^\d]+/g, '') : '';
-  },
+  extractNumbers: extractNumbers,
 
   /**
    * Shorten a string to a given length if it is longr than that.
@@ -300,6 +308,30 @@ var nmPhoneUtils = {
       !!phoneData.cellTokens.number &&
       this.validateNumber(phoneData.cellTokens.number, min, max).valid
     );
+  },
+
+  /**
+   * Return the numeric validator function.
+   * The numericValidator function will filter out non numeric characters from the given input and call the callback.
+   * The callback is invoked only if one or more characters are removed from the input string
+   *
+   * @param callback
+   * @returns {*}
+   */
+  getNumericValidator: function getNumericValidator(callback) {
+    return function numericValidator(input) {
+      var output;
+
+      if (_.isString(input)) {
+        output = extractNumbers(input);
+
+        if (input !== output) {
+          callback(output);
+        }
+      }
+
+      return output;
+    };
   }
 }
 

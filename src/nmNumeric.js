@@ -9,7 +9,7 @@
  * <input type="text" data-nm-numeric />
  *
  */
-angular.module('namshi.nmPhoneNumber').directive('nmNumeric', function () {
+angular.module('namshi.nmPhoneNumber').directive('nmNumeric', function (nmPhoneUtils) {
   return {
     require:  'ngModel',
     priority: 500,
@@ -23,28 +23,7 @@ angular.module('namshi.nmPhoneNumber').directive('nmNumeric', function () {
         modelCtrl.$render();
       };
 
-      /**
-       * Parser to make sure that users are not allowed to enter characters other than numerics
-       * in the field
-       *
-       * @param input
-       * @returns {*}
-       */
-      var numericValidator = function (input) {
-        var output;
-
-        if (_.isString(input)) {
-          output = input.replace(/[^0-9]/g, '');
-
-          if (input !== output) {
-            updateView(output);
-          }
-        }
-
-        return output;
-      };
-
-      modelCtrl.$parsers.push(numericValidator);
+      modelCtrl.$parsers.push(nmPhoneUtils.getNumericValidator(updateView));
     }
   };
 });

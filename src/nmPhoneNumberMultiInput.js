@@ -64,7 +64,7 @@ angular
           );
         }
 
-        $scope.onContrySelected = function(options) {
+        $scope.onCountrySelected = function(options) {
           resetValidation();
           $scope.validateCountry();
 
@@ -80,7 +80,6 @@ angular
           cellTokens.carrierCode = phoneCodes.carrierCodes[0] ? phoneCodes.carrierCodes[0].toString() : null;
 
           $scope.validateCarrierCode();
-          console.log('options', options, (!options || !options.validateNumber));
           (options && !options.validateNumber) ? null : $scope.validateNumber({trimNumber: false});
         };
 

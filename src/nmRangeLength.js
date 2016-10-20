@@ -36,23 +36,21 @@ angular.module('namshi.nmPhoneNumber').directive('nmRangeLength', ['nmPhoneUtils
       var maxlength = parseInt(scope.maxlength, 10) || 15;
       var minlength = parseInt(scope.minlength, 10) || 1;
 
-      var maxLengthValidator = nmPhoneUtils.getMaxLengthValidator(function (isValid, value) {
+      var maxLengthValidator = nmPhoneUtils.getMaxLengthValidator(maxlength, function (isValid, value) {
         ctrl.$setValidity('maxlength', isValid);
         if (!(isValid || _.isEmpty(value))) {
           ctrl.$setViewValue(value);
           ctrl.$render();
         }
 
-      }, maxlength);
+      });
 
-      var minLengthValidator = nmPhoneUtils.getMinLengthValidator(function (isValid) {
+      var minLengthValidator = nmPhoneUtils.getMinLengthValidator(minlength, function (isValid) {
         ctrl.$setValidity('minlength', isValid);
-      }, minlength);
+      });
 
-      ctrl.$parsers.push(maxLengthValidator);
-      ctrl.$parsers.push(minLengthValidator);
-      ctrl.$formatters.push(maxLengthValidator);
-      ctrl.$formatters.push(minLengthValidator);
+      ctrl.$parsers.push(maxLengthValidator, minLengthValidator);
+      ctrl.$formatters.push(maxLengthValidator, minLengthValidator);
     }
   };
 }]);

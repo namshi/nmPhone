@@ -302,11 +302,13 @@ var nmPhoneUtils = {
       return '';
     }
 
+    var data = phoneData.cellTokens;
+
     return [
-        (!!phoneData.cellTokens.countryCode ? '+' + phoneData.cellTokens.countryCode : ''),
-        (''+phoneData.cellTokens.carrierCode),
-        (''+phoneData.cellTokens.number),
-      ].filter(function(v) { return !_.isEmpty(v); }).join('-');
+      (data.countryCode ? '+' + data.countryCode : ''),
+      data.carrierCode,
+      data.number
+    ].filter(function(v) { return !!v ; }).join('-');
   },
 
   isPhoneDataValid: function isPhoneDataValid(phoneData, phoneSettings, min, max) {
@@ -350,10 +352,10 @@ var nmPhoneUtils = {
    * @param value
    * @returns {*}
    */
-  getMaxLengthValidator: function getMaxLengthValidator(callback, maxlength) {
+  getMaxLengthValidator: function getMaxLengthValidator(maxlength, callback) {
     return function maxLengthValidator(value) {
-      var isValid = _.isEmpty(value) || value.length <= maxlength;
-      if (!(isValid || _.isEmpty(value))) {
+      var isValid = !value || value.length <= maxlength;
+      if (!isValid && !!value) {
         value = value.substring(0, maxlength);
       }
 
@@ -370,9 +372,9 @@ var nmPhoneUtils = {
    * @param value
    * @returns {*}
    */
-  getMinLengthValidator: function getMinLengthValidator(callback, minlength) {
+  getMinLengthValidator: function getMinLengthValidator(minlength, callback) {
     return function minLengthValidator(value) {
-      var isValid = _.isEmpty(value) || value.length >= minlength;
+      var isValid = !value || value.length >= minlength;
       callback(isValid, value);
 
       return value;

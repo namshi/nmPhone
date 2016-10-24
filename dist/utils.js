@@ -149,13 +149,17 @@ var nmPhoneUtils =
 	   *
 	   * IF there are any errors it will return the same object
 	   * but all the values are going to be empty.
+	   *
+	   * If the contextCountry is different from the phone one it
+	   * will be returned an empty object with just the countryCode
+	   * as the contextCountry specifies.
 	   */
-	  parsePhone: function parsePhone(phone, phoneSettings, defaultCountry) {
+	  parsePhone: function parsePhone(phone, phoneSettings, contextCountry) {
 	    var eo = _.clone(emptyPhoneObject);
 
 	    if (!phone || !phoneRegex.test(phone)) {
-	      eo.fkCountry = defaultCountry || '';
-	      eo.cellTokens.countryCode = phoneSettings[defaultCountry] ? phoneSettings[defaultCountry].phoneCodes.country : '';
+	      eo.fkCountry = contextCountry || '';
+	      eo.cellTokens.countryCode = phoneSettings[contextCountry] ? phoneSettings[contextCountry].phoneCodes.country : '';
 
 	      return eo;
 	    }
@@ -166,9 +170,9 @@ var nmPhoneUtils =
 	      return setting.phoneCodes.country == countryCode;
 	    });
 
-	    if (!phoneCountryConfig) {
-	      eo.fkCountry = defaultCountry || '';
-	      eo.cellTokens.countryCode = phoneSettings[defaultCountry] ? phoneSettings[defaultCountry].phoneCodes.country : '';
+	    if (!phoneCountryConfig || (contextCountry && (contextCountry.toLowerCase() !== phoneCountryConfig.iso2Code.toLowerCase()))) {
+	      eo.fkCountry = contextCountry || '';
+	      eo.cellTokens.countryCode = phoneSettings[contextCountry] ? phoneSettings[contextCountry].phoneCodes.country : '';
 
 	      return eo;
 	    }

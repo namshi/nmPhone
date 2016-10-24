@@ -98,6 +98,15 @@ describe('nmPhoneUtils', function() {
         "fkCountry": ""
       });
 
+      expect(utils.parsePhone('+971-52-0000000', phoneSettings, 'sa')).to.deep.equal({
+        "cellTokens": {
+          "carrierCode": "",
+          "countryCode": 966,
+          "number": ""
+        },
+        "fkCountry": "sa"
+      });
+
       done();
     });
   });

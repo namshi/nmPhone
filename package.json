@@ -10,7 +10,7 @@
   "author": "Filippo De Santis <filippo.desantis@namshi.com>",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.5.1"
+    "lodash": "4.5.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.8",

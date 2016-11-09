@@ -23,7 +23,13 @@ describe('nmPhoneUtils', function() {
       expect(utils.isValidPhoneNumber('+971-0000000')).to.equal(true);
       expect(utils.isValidPhoneNumber('+97100000000')).to.equal(true);
       expect(utils.isValidPhoneNumber('+9710000000')).to.equal(true);
+      expect(utils.isValidPhoneNumber('+39-000-0000000')).to.equal(true);
+      expect(utils.isValidPhoneNumber('+390000000000')).to.equal(true);
+      expect(utils.isValidPhoneNumber('0039-000-0000000')).to.equal(true);
+      expect(utils.isValidPhoneNumber('00390000000000')).to.equal(true);
 
+      expect(utils.isValidPhoneNumber('0039000-0000000')).to.equal(false);
+      expect(utils.isValidPhoneNumber('+39000-0000000')).to.equal(false);
       expect(utils.isValidPhoneNumber('+971-00-000')).to.equal(false);
       expect(utils.isValidPhoneNumber('00971-00-000')).to.equal(false);
       expect(utils.isValidPhoneNumber('aaa')).to.equal(false);

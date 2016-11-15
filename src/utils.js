@@ -40,9 +40,9 @@ var emptyPhoneObject = {
 };
 
 /**
- * @see https://www.debuggex.com/r/tcX_Ez3vptR8n0Ff
+ * @see https://www.debuggex.com/r/1SjdvMIFUKVd6AS0
  */
-var phoneRegex = /^[00|\+]+([0-9]{2,3})(\-([0-9]{1,2}))?[\-]?([0-9]{6,8})$/;
+var phoneRegex = /^[00|\+]+([0-9]{2,3})(\-([0-9]{1,3}))?[\-]?([0-9]{6,9})$/;
 
 var nmPhoneUtils = {
   contains: contains,

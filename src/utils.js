@@ -42,7 +42,7 @@ var emptyPhoneObject = {
 /**
  * @see https://www.debuggex.com/r/tcX_Ez3vptR8n0Ff
  */
-var phoneRegex = /^(00|\+)[0-9]{2,3}[\-\s0-9]{9,13}$/;
+var phoneRegex = /^(00|\+)[0-9]{1,3}[\-\s0-9]{8,14}$/;
 
 var nmPhoneUtils = {
   contains: contains,

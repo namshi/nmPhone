@@ -1,6 +1,6 @@
 {
   "name": "nmPhone",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Angular directives and a separate module to validate international phone numbers.",
   "main": "index.js",
   "scripts": {
